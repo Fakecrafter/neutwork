@@ -1,8 +1,6 @@
-import neo
-
 type
   Layer = object
-    weights: Vector[float64]
-    bias: Vector[float64]
-    outputs: Vector[float64]
+    weights: seq[float64]
+    bias: seq[float64]
+    outputs: seq[float64]
   Network = seq[Layer]
