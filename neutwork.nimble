@@ -5,10 +5,9 @@ author        = "Fakecrafter"
 description   = "neural network experimentation"
 license       = "MIT"
 srcDir        = "src"
-bin           = @["neutwork"]
+bin           = @["cube"]
 
 
 # Dependencies
 
 requires "nim >= 1.6.12"
-requires "neo"
