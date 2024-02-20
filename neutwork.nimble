@@ -5,7 +5,7 @@ author        = "Fakecrafter"
 description   = "neural network experimentation"
 license       = "MIT"
 srcDir        = "src"
-bin           = @["cube"]
+bin           = @["neutwork"]
 
 
 # Dependencies
