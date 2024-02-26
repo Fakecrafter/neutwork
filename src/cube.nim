@@ -1,5 +1,8 @@
+import std/random
+
 type
   Color = enum yellow, white, red, orange, blue, green
+  Axis = enum xAxis, yAxis, zAxis
   Position = tuple[x: int, y: int, z: int]
   Piece = ref object
     pos: Position
@@ -32,6 +35,22 @@ proc newSolvedCube(): Cube =
   result[6] = Piece(pos: p7, cx: red,    cy: green, cz: white)
   result[7] = Piece(pos: p8, cx: red,    cy: green, cz: yellow)
 
+proc switchColor(p: Piece, a: Axis) =
+  case a
+  of xAxis:
+    let temp = p.cy
+    p.cy = p.cz
+    p.cz = temp
+  of yAxis:
+    let temp = p.cx
+    p.cx = p.cz
+    p.cz = temp
+  of zAxis:
+    let temp = p.cx
+    p.cx = p.cy
+    p.cy = temp
+
+
 # Y-Rotation
 proc R(c: Cube, rotations: int) =
   const rotationY = [[0,0,-1],[0,1,0],[1,0,0]]
@@ -39,6 +58,7 @@ proc R(c: Cube, rotations: int) =
     for piece in c:
       if piece.pos.y == 1:
         piece.pos = rotate(piece.pos, rotationY)
+        piece.switchColor(yAxis)
 
 proc L(c: Cube, rotations: int) =
   const rotationY = [[0,0,-1],[0,1,0],[1,0,0]]
@@ -46,6 +66,7 @@ proc L(c: Cube, rotations: int) =
     for piece in c:
       if piece.pos.y == -1:
         piece.pos = rotate(piece.pos, rotationY)
+        piece.switchColor(yAxis)
 
 # Z-Rotation
 proc U(c: Cube, rotations: int) =
@@ -54,6 +75,7 @@ proc U(c: Cube, rotations: int) =
     for piece in c:
       if piece.pos.z == 1:
         piece.pos = rotate(piece.pos, rotationZ)
+        piece.switchColor(zAxis)
 
 proc D(c: Cube, rotations: int) =
   const rotationZ = [[0,-1,0],[1,0,0],[0,0,1]]
@@ -61,6 +83,7 @@ proc D(c: Cube, rotations: int) =
     for piece in c:
       if piece.pos.z == 1:
         piece.pos = rotate(piece.pos, rotationZ)
+        piece.switchColor(zAxis)
 
 # X-Rotation
 proc F(c: Cube, rotations: int) =
@@ -69,6 +92,7 @@ proc F(c: Cube, rotations: int) =
     for piece in c:
       if piece.pos.x == 1:
         piece.pos = rotate(piece.pos, rotationX)
+        piece.switchColor(xAxis)
 
 proc B(c: Cube, rotations: int) =
   const rotationX = [[1,0,0],[0,0,-1],[0,1,0]]
@@ -76,9 +100,21 @@ proc B(c: Cube, rotations: int) =
     for piece in c:
       if piece.pos.x == 1:
         piece.pos = rotate(piece.pos, rotationX)
+        piece.switchColor(xAxis)
+
+proc newRandomCube(): Cube =
+  randomize()
+  result = newSolvedCube()
+  for i in countup(0,10):
+    let r = rand(6)
+    case r
+    of 0: R(result, rand(3)+1)
+    of 1: L(result, rand(3)+1)
+    of 2: U(result, rand(3)+1)
+    of 3: D(result, rand(3)+1)
+    of 4: F(result, rand(3)+1)
+    of 5: B(result, rand(3)+1)
+    else: discard
 
 when isMainModule:
-  let a = newSolvedCube()
-  let b = newSolvedCube()
-  if a[0][] == b[0][]:
-    echo "hello"
+  let a = newRandomCube()
