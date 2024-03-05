@@ -20,6 +20,8 @@ proc forwardProp(nn: Network, inputs: seq[float64]): seq[float64] =
       layer.output[i] = calcNeuron(layer.weights[i], inputs)
     inputs = layer.output
 
+proc backwardProp(nn: Network) = discard
+
 proc createRandomNetwork(amount: seq[int]): Network =
   randomize()
   var newLayer: Layer = Layer(inputSize: amount[0])
